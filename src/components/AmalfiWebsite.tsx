@@ -1,11 +1,25 @@
 import React, { useState } from 'react';
 import { Menu } from 'lucide-react';
 
-const AmalfiWebsite = () => {
-  const [currentPage, setCurrentPage] = useState('home');
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+type PageType = 'home' | 'about' | 'tokenomics';
 
-  const NavLink = ({ page, label }) => (
+interface NavLinkProps {
+  page: PageType;
+  label: string;
+}
+
+interface PageContent {
+  title: string;
+  subtitle?: string;
+  content?: string;
+  bg: string;
+}
+
+const AmalfiWebsite: React.FC = () => {
+  const [currentPage, setCurrentPage] = useState<PageType>('home');
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+
+  const NavLink: React.FC<NavLinkProps> = ({ page, label }) => (
     <button
       onClick={() => setCurrentPage(page)}
       className={`px-4 py-2 rounded-lg transition-colors ${
@@ -16,7 +30,7 @@ const AmalfiWebsite = () => {
     </button>
   );
 
-  const pageContent: Record<string, { title: string; subtitle?: string; content: string; bg: string }> = {
+  const pageContent: Record<PageType, PageContent> = {
     home: {
       title: "Amalfi Coin",
       subtitle: "Relive your childhood gameboy days with $AMA",
@@ -36,7 +50,6 @@ const AmalfiWebsite = () => {
 
   return (
     <div className="min-h-screen font-sans">
-      {/* Navigation */}
       <nav className="fixed w-full bg-white/90 backdrop-blur-sm shadow-lg z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -44,14 +57,12 @@ const AmalfiWebsite = () => {
               $AMA
             </div>
             
-            {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-4">
               <NavLink page="home" label="Home" />
               <NavLink page="about" label="About" />
               <NavLink page="tokenomics" label="Tokenomics" />
             </div>
 
-            {/* Mobile Navigation Button */}
             <div className="md:hidden">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -63,7 +74,6 @@ const AmalfiWebsite = () => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden bg-white border-t">
             <div className="px-2 pt-2 pb-3 space-y-1">
@@ -75,7 +85,6 @@ const AmalfiWebsite = () => {
         )}
       </nav>
 
-      {/* Page Content */}
       <main className={`min-h-screen pt-16 ${pageContent[currentPage].bg}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className={`bg-white/80 backdrop-blur-sm rounded-xl p-8 shadow-xl ${
